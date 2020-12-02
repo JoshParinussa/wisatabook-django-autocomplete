@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <title>Autocomplete</title>
+</head>
+<body>
+<form>
+    <label for="product">Book's Title</label>
+    <input type="text" name="book" id="book">
+</form>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    $(function () {
+        const J = []
+        $("#book").autocomplete({
+            source: function ( request, response ) {
+            $.ajax({
+                url: "/api/v1/book",
+                dataType: "json",
+                data: {
+                            term: request.term      
+                        },
+                success: function (data) {
+                    response( $.map( data.results, function ( item ) {
+                        return {
+                            label: item.title,
+                            value: item.title
+                        };
+                    }));
+                }
+            });
+        },
+            minLength: 2
+        });
+    });
+</script>
+</body>
+</html>
